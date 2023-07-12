@@ -5,12 +5,16 @@ import Header from "@/components/Header";
 import Input from "@/components/Input";
 import Table from "@/components/Table";
 import axios from "axios";
+import { RevealWrapper } from "next-reveal";
 import { useContext, useEffect, useState } from "react";
 import { styled } from "styled-components";
 
 const ColumsWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1fr;
+  @media screen and (min-width: 768px) {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
   gap: 40px;
   margin-top: 40px;
 `;
@@ -25,30 +29,44 @@ const ProductInfoCell = styled.td`
   padding: 10px 0;
 `;
 const ProductImageBox = styled.div`
-  width: 100px;
-  height: 100px;
-  padding: 10px;
-
+  width: 70px;
+  height: 70px;
+  padding: 2px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 10px;
   img {
+    max-width: 60px;
+    max-height: 60px;
+  }
+  @media screen and (min-width: 768px) {
+    padding: 10px;
+    width: 100px;
+  height: 100px;
+    img {
     max-width: 80px;
     max-height: 80px;
+  }
   }
 `;
 
 const QuantityLabel = styled.span`
-  padding: 0 3px;
+  padding: 0 15px;
+  display: block;
+  @media screen and (min-width: 768px) {
+    display: inline-block;
+    padding: 0 10px;
+  }
 `;
 const CityHolder = styled.div`
   display: flex;
   gap: 5px;
 `;
 export default function CartPage() {
-  const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
+  const { cartProducts, addProduct, removeProduct, clearCart } =
+    useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -56,7 +74,7 @@ export default function CartPage() {
   const [postalCode, setPostalCode] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
   const [country, setCountry] = useState("");
-  const [isSuccess, setIsSuccess]=useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     if (cartProducts.length > 0) {
@@ -67,15 +85,15 @@ export default function CartPage() {
       setProducts([]);
     }
   }, [cartProducts]);
-  useEffect(()=>{
-    if(typeof window === 'undefined'){
-        return;
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
     }
-    if(window?.location.href.includes('success')){
-        setIsSuccess(true);
-        clearCart();
+    if (window?.location.href.includes("success")) {
+      setIsSuccess(true);
+      clearCart();
     }
-  },[]);
+  }, []);
   function moreOfThisProduct(id) {
     addProduct(id);
   }
@@ -87,36 +105,42 @@ export default function CartPage() {
     const price = products.find((p) => p._id === productId)?.price || 0;
     total += price;
   }
-  async function goToPayment(){
-    const response = await axios.post('/api/checkout', {
-        name,email,city,postalCode,streetAddress,country,
-        cartProducts,
+  async function goToPayment() {
+    const response = await axios.post("/api/checkout", {
+      name,
+      email,
+      city,
+      postalCode,
+      streetAddress,
+      country,
+      cartProducts,
     });
-    if(response.data.url){
-        window.location = response.data.url;
-    } 
+    if (response.data.url) {
+      window.location = response.data.url;
+    }
   }
-  if(isSuccess){
+  if (isSuccess) {
     return (
-        <>
-            <Header/>
-            <Center>
-                <ColumsWrapper>
-                
-                <Box>
-                    <h1>Thanks for your order!</h1>
-                    <p>We will email you when your order will be sent.</p>
-                </Box>
-                </ColumsWrapper>
-            </Center>
-        </>
-    )
+      <>
+        <Header />
+        <Center>
+          <ColumsWrapper>
+            <Box>
+              <h1>Thanks for your order!</h1>
+              <p>We will email you when your order will be sent.</p>
+            </Box>
+          </ColumsWrapper>
+        </Center>
+      </>
+    );
   }
   return (
     <>
       <Header />
       <Center>
         <ColumsWrapper>
+        <RevealWrapper delay={0}>
+          
           <Box>
             <h2>Cart</h2>
 
@@ -169,59 +193,64 @@ export default function CartPage() {
               </Table>
             )}
           </Box>
+
+        </RevealWrapper>
           {!!cartProducts?.length && (
+            <RevealWrapper delay={100}>
+
+            
             <Box>
               <h2> Order Information</h2>
-              
+
+              <Input
+                type="text"
+                placeholder="Name"
+                value={name}
+                name="name"
+                onChange={(ev) => setName(ev.target.value)}
+              />
+              <Input
+                type="text"
+                placeholder="Email"
+                value={email}
+                name="email"
+                onChange={(ev) => setEmail(ev.target.value)}
+              />
+              <CityHolder>
                 <Input
                   type="text"
-                  placeholder="Name"
-                  value={name}
-                  name="name"
-                  onChange={(ev) => setName(ev.target.value)}
+                  placeholder="City"
+                  value={city}
+                  name="city"
+                  onChange={(ev) => setCity(ev.target.value)}
                 />
                 <Input
                   type="text"
-                  placeholder="Email"
-                  value={email}
-                  name="email"
-                  onChange={(ev) => setEmail(ev.target.value)}
+                  placeholder="Postal Code"
+                  value={postalCode}
+                  name="postalCode"
+                  onChange={(ev) => setPostalCode(ev.target.value)}
                 />
-                <CityHolder>
-                  <Input
-                    type="text"
-                    placeholder="City"
-                    value={city}
-                    name="city"
-                    onChange={(ev) => setCity(ev.target.value)}
-                  />
-                  <Input
-                    type="text"
-                    placeholder="Postal Code"
-                    value={postalCode}
-                    name="postalCode"
-                    onChange={(ev) => setPostalCode(ev.target.value)}
-                  />
-                </CityHolder>
-                <Input
-                  type="text"
-                  placeholder="Street Address"
-                  value={streetAddress}
-                  name="streetAddress"
-                  onChange={(ev) => setStreetAddress(ev.target.value)}
-                />
-                <Input
-                  type="text"
-                  placeholder="Country"
-                  value={country}
-                  name="country"
-                  onChange={(ev) => setCountry(ev.target.value)}
-                />
-                <Button black block onClick={goToPayment}>
-                  Continue to payment
-                </Button>
-              
+              </CityHolder>
+              <Input
+                type="text"
+                placeholder="Street Address"
+                value={streetAddress}
+                name="streetAddress"
+                onChange={(ev) => setStreetAddress(ev.target.value)}
+              />
+              <Input
+                type="text"
+                placeholder="Country"
+                value={country}
+                name="country"
+                onChange={(ev) => setCountry(ev.target.value)}
+              />
+              <Button black block onClick={goToPayment}>
+                Continue to payment
+              </Button>
             </Box>
+            </RevealWrapper>
           )}
         </ColumsWrapper>
       </Center>

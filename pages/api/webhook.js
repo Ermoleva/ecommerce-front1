@@ -29,7 +29,6 @@ export default async function handler(req,res) {
           paid:true,
         })
       }
-      console.log(data);
       break;
     default:
       console.log(`Unhandled event type ${event.type}`);
@@ -44,3 +43,9 @@ export const config = {
 
 //fairly-gem-fair-eager
 //acct_1NLPnrG9TfA8J8GU
+
+//dote-worthy-easy-swift
+//acct_1NLPnrG9TfA8J8GU
+
+//favour-humble-lead-heal
+// acct_1NLPnrG9TfA8J8GU
