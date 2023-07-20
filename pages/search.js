@@ -60,8 +60,8 @@ export default function SearchPage() {
           placeholder="Search for products..."
         />
         {!isLoading && phrase !== '' && products.length === 0 && (
-            // eslint-disable-next-line react/no-unescaped-entities
-            <h2>No products found for query "{phrase}"</h2>
+            
+            <h2>No products found for query &quot;{phrase}&quot;</h2>
         )}
         {isLoading && (
             <Spinner fullWidth={true}/>
