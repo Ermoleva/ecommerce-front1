@@ -20,7 +20,7 @@ const InputWraooer = styled.div`
   margin: 25px 0;
   padding:5px 0;
   background-color: #eeeeeeaa;
-  
+
 `;
 
 export default function SearchPage() {
@@ -60,6 +60,7 @@ export default function SearchPage() {
           placeholder="Search for products..."
         />
         {!isLoading && phrase !== '' && products.length === 0 && (
+            // eslint-disable-next-line react/no-unescaped-entities
             <h2>No products found for query "{phrase}"</h2>
         )}
         {isLoading && (

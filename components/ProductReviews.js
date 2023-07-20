@@ -113,7 +113,7 @@ export default function ProductReviews({ product }) {
           {reviews.length === 0 && <p>No reviews </p>}
           {reviews.length > 0 &&
             reviews.map((review) => (
-              <ReviewWrapper>
+              <ReviewWrapper key={review}>
                 <ReviewHeader>
                   <StarsRating
                     size={"sm"}

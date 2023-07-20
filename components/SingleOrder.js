@@ -35,7 +35,7 @@ export default function SingleOrder({ line_items, createdAt, ...rest }) {
             </Address>
         </div>
         <div> {line_items.map((item) => (
-        <ProductRow> <span>{item.quantity} x </span> {item.price_data.product_data.name} </ProductRow>
+        <ProductRow key={item}> <span>{item.quantity} x </span> {item.price_data.product_data.name} </ProductRow>
       ))}</div>
     
      
